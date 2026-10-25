@@ -37,4 +37,20 @@ class NumberConstant {
   static const headerButtonIconSize = 20.0;
   static const headerMoreIconSize = 16.0;
   static const playIconSize = 38.0;
+  static const searchBarPaddingH = 12.0;
+  static const searchBarPaddingV = 14.0;
+  static const searchIconGap = 10.0;
+  static const greetingAvatarGap = 10.0;
+  static const categoryChipPaddingH = 12.0;
+  static const categoryChipPaddingV = 6.0;
+  static const categoryIconGap = 6.0;
+  static const categoryIconSize = 24.0;
+  static const miniPlayerPadding = 12.0;
+  static const miniPlayerBottom = 16.0;
+  static const homeBottomContentPadding = 100.0;
+  static const notificationBadgeSize = 8.0;
+  static const wavingHandSize = 22.0;
+  static const searchIconSize = 24.0;
+  static const micIconSize = 20.0;
+  static const headerGlowSize = 206.0;
 }
