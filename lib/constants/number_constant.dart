@@ -32,4 +32,9 @@ class NumberConstant {
   static const playButtonSize = 38.0;
   static const nowPlayingPlaySize = 58.0;
   static const recentlyPlayedRotation = 0.1;
+  static const headerBackPadding = 9.0;
+  static const headerMorePadding = 11.0;
+  static const headerButtonIconSize = 20.0;
+  static const headerMoreIconSize = 16.0;
+  static const playIconSize = 38.0;
 }
