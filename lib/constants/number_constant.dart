@@ -1,0 +1,35 @@
+class NumberConstant {
+  static const horizontalPadding = 20.0;
+  static const headerTopPadding = 48.0;
+  static const sectionGap = 20.0;
+  static const contentGap = 12.0;
+  static const smallGap = 8.0;
+  static const tinyGap = 4.0;
+  static const chipGap = 12.0;
+  static const playlistCardGap = 16.0;
+  static const recentlyPlayedCardGap = 9.0;
+  static const recentlyPlayedCardWidth = 261.0;
+  static const recentlyPlayedCardHeight = 188.0;
+  static const recentlyPlayedFeaturedWidth = 289.0;
+  static const recentlyPlayedRadius = 32.0;
+  static const playlistCoverSize = 115.0;
+  static const playlistCoverRadius = 24.0;
+  static const songThumbSize = 47.0;
+  static const songThumbRadius = 12.0;
+  static const avatarSize = 50.0;
+  static const headerButtonRadius = 12.0;
+  static const searchBarRadius = 16.0;
+  static const miniPlayerRadius = 20.0;
+  static const nowPlayingCoverRadius = 36.0;
+  static const nowPlayingCoverHeight = 283.0;
+  static const albumCoverWidth = 181.0;
+  static const albumCoverHeight = 183.0;
+  static const albumCoverRadius = 32.0;
+  static const lyricsBoxRadius = 20.0;
+  static const songListItemRadius = 18.0;
+  static const categoryChipRadius = 50.0;
+  static const headerBottomRadius = 50.0;
+  static const playButtonSize = 38.0;
+  static const nowPlayingPlaySize = 58.0;
+  static const recentlyPlayedRotation = 0.1;
+}

@@ -1,0 +1,20 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="38" height="39.3301" viewBox="0 0 38 39.3301" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 57">
+<circle id="Ellipse 3" cx="19" cy="19" r="19" fill="white"/>
+<g id="Polygon 4" filter="url(#filter0_d_0_82)">
+<path d="M24 19L16.5 23.3301L16.5 14.6699L24 19Z" fill="#320B4F"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_82" x="4.5" y="6.66987" width="31.5" height="32.6603" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="6"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.580392 0 0 0 0 0.376471 0 0 0 0 1 0 0 0 0.5 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_82"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_82" result="shape"/>
+</filter>
+</defs>
+</svg>
