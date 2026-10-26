@@ -422,9 +422,20 @@ class _HomeView extends StatelessWidget {
           spacing: NumberConstant.smallGap,
           crossAxisAlignment: .start,
           children: [
-            ClipRRect(
-              borderRadius: .circular(NumberConstant.playlistCoverRadius),
-              child: Image.asset(playlist.coverAsset, fit: .cover),
+            Hero(
+              tag: 'album-${playlist.id}',
+              child: Material(
+                color: Colors.transparent,
+                child: ClipRRect(
+                  borderRadius: .circular(NumberConstant.playlistCoverRadius),
+                  child: Image.asset(
+                    playlist.coverAsset,
+                    width: NumberConstant.playlistCoverSize,
+                    height: NumberConstant.playlistCoverSize,
+                    fit: .cover,
+                  ),
+                ),
+              ),
             ),
             Row(
               crossAxisAlignment: .start,

@@ -35,7 +35,7 @@ class AlbumScreen extends StatelessWidget {
             children: [
               AppScreenHeader(
                 title: StringConst.album,
-                onBack: ()=> context.pop(),
+                onBack: () => context.pop(),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -68,27 +68,33 @@ class AlbumScreen extends StatelessWidget {
             children: [
               Positioned(
                 right: 0,
-                child: SvgPicture.asset(
-                  AssetRes.icVinyl,
-                  width: NumberConstant.albumVinylSize,
-                  height: NumberConstant.albumVinylSize,
+                child: Consumer<PlayerProvider>(
+                  builder: (context, player, _) => _RotatingVinyl(
+                    isPlaying: player.isPlaying,
+                  ),
                 ),
               ),
-              Container(
-                width: NumberConstant.albumCoverWidth,
-                height: NumberConstant.albumCoverHeight,
-                decoration: BoxDecoration(
-                  borderRadius: .circular(NumberConstant.albumCoverRadius),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x66FF6594),
-                      offset: Offset(0, 4),
-                      blurRadius: 24,
+              Hero(
+                tag: 'album-${album.id}',
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: NumberConstant.albumCoverWidth,
+                    height: NumberConstant.albumCoverHeight,
+                    decoration: BoxDecoration(
+                      borderRadius: .circular(NumberConstant.albumCoverRadius),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x66FF6594),
+                          offset: Offset(0, 4),
+                          blurRadius: 24,
+                        ),
+                      ],
+                      image: DecorationImage(
+                        image: AssetImage(album.coverAsset),
+                        fit: .cover,
+                      ),
                     ),
-                  ],
-                  image: DecorationImage(
-                    image: AssetImage(album.coverAsset),
-                    fit: .cover,
                   ),
                 ),
               ),
@@ -98,8 +104,8 @@ class AlbumScreen extends StatelessWidget {
         Column(
           spacing: NumberConstant.tinyGap,
           children: [
-            Text(album.title, style: AppTextStyles.songTitle, textAlign: .center,),
-            Text(album.artist, style: AppTextStyles.songArtist, textAlign: .center,),
+            Text(album.title, style: AppTextStyles.songTitle, textAlign: .center),
+            Text(album.artist, style: AppTextStyles.songArtist, textAlign: .center),
           ],
         ),
       ],
@@ -111,45 +117,54 @@ class AlbumScreen extends StatelessWidget {
       mainAxisAlignment: .center,
       spacing: NumberConstant.albumActionGap,
       children: [
-        _buildRoundAction(
-          child: SvgPicture.asset(
-            AssetRes.icShare,
-            width: NumberConstant.albumShareIconSize,
-            height: NumberConstant.albumShareIconSize,
-            colorFilter: .mode(AppColors.primary, .srcIn),
+        _PressableScale(
+          onTap: () {},
+          child: _buildRoundAction(
+            child: SvgPicture.asset(
+              AssetRes.icShare,
+              width: NumberConstant.albumShareIconSize,
+              height: NumberConstant.albumShareIconSize,
+              colorFilter: .mode(AppColors.primary, .srcIn),
+            ),
           ),
         ),
         Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: .circular(NumberConstant.categoryChipRadius),
-            ),
-            padding: .symmetric(
-              horizontal: NumberConstant.albumActionPaddingH,
-              vertical: NumberConstant.albumActionPaddingV,
-            ),
-            child: Row(
-              mainAxisAlignment: .center,
-              spacing: NumberConstant.albumSubscribeIconGap,
-              children: [
-                SvgPicture.asset(
-                  AssetRes.icSubscribeBookmark,
-                  width: NumberConstant.albumSubscribeIconSize,
-                  height: NumberConstant.albumSubscribeIconSize,
-                  colorFilter: .mode(AppColors.white, .srcIn),
-                ),
-                Text(StringConst.subscribe, style: AppTextStyles.subscribe,),
-              ],
+          child: _PressableScale(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: .circular(NumberConstant.categoryChipRadius),
+              ),
+              padding: .symmetric(
+                horizontal: NumberConstant.albumActionPaddingH,
+                vertical: NumberConstant.albumActionPaddingV,
+              ),
+              child: Row(
+                mainAxisAlignment: .center,
+                spacing: NumberConstant.albumSubscribeIconGap,
+                children: [
+                  SvgPicture.asset(
+                    AssetRes.icSubscribeBookmark,
+                    width: NumberConstant.albumSubscribeIconSize,
+                    height: NumberConstant.albumSubscribeIconSize,
+                    colorFilter: .mode(AppColors.white, .srcIn),
+                  ),
+                  Text(StringConst.subscribe, style: AppTextStyles.subscribe),
+                ],
+              ),
             ),
           ),
         ),
-        _buildRoundAction(
-          child: SvgPicture.asset(
-            AssetRes.icDownload,
-            width: NumberConstant.albumDownloadIconSize,
-            height: NumberConstant.albumDownloadIconSize,
-            colorFilter: .mode(AppColors.primary, .srcIn),
+        _PressableScale(
+          onTap: () {},
+          child: _buildRoundAction(
+            child: SvgPicture.asset(
+              AssetRes.icDownload,
+              width: NumberConstant.albumDownloadIconSize,
+              height: NumberConstant.albumDownloadIconSize,
+              colorFilter: .mode(AppColors.primary, .srcIn),
+            ),
           ),
         ),
       ],
@@ -175,27 +190,30 @@ class AlbumScreen extends StatelessWidget {
       spacing: NumberConstant.sectionGap,
       crossAxisAlignment: .start,
       children: [
-        const SectionHeader(title: StringConst.songList, showSeeMore: false,),
+        const SectionHeader(title: StringConst.songList, showSeeMore: false),
         Consumer<PlayerProvider>(
-          builder: (ctx, player, _)=> Column(
+          builder: (ctx, player, _) => Column(
             spacing: NumberConstant.songListGap,
             children: [
-              for (final song in _songs)
-                _buildSongTile(
-                  context: context,
-                  song: song,
-                  isPlaying: player.isPlaying && player.currentSong.id == song.id,
-                  onPlayTap: () {
-                    if (player.currentSong.id == song.id) {
-                      player.togglePlayPause();
-                    } else {
-                      player.play(song);
-                    }
-                  },
-                  onTap: () {
-                    player.play(song);
-                    context.push(NamedRoutes.nowPlaying.routeName);
-                  },
+              for (var i = 0; i < _songs.length; i++)
+                _buildStaggeredEntrance(
+                  index: i,
+                  child: _buildSongTile(
+                    song: _songs[i],
+                    isCurrent: player.currentSong.id == _songs[i].id,
+                    isPlaying: player.isPlaying && player.currentSong.id == _songs[i].id,
+                    onPlayTap: () {
+                      if (player.currentSong.id == _songs[i].id) {
+                        player.togglePlayPause();
+                      } else {
+                        player.play(_songs[i]);
+                      }
+                    },
+                    onTap: () {
+                      player.play(_songs[i]);
+                      context.push(NamedRoutes.nowPlaying.routeName);
+                    },
+                  ),
                 ),
             ],
           ),
@@ -204,32 +222,68 @@ class AlbumScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildStaggeredEntrance({required int index, required Widget child}) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(
+        milliseconds: NumberConstant.animNormal + (index * NumberConstant.animStaggerMs),
+      ),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, animatedChild) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, NumberConstant.animEntranceOffset * (1 - value)),
+            child: animatedChild,
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+
   Widget _buildSongTile({
-    required BuildContext context,
     required SongModel song,
+    required bool isCurrent,
     required bool isPlaying,
     required VoidCallback onPlayTap,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: NumberConstant.animFast),
+        curve: Curves.easeOutCubic,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isCurrent
+              ? AppColors.primary.withValues(alpha: 0.08)
+              : AppColors.white,
           borderRadius: .circular(NumberConstant.songListItemRadius),
+          border: Border.all(
+            color: isCurrent
+                ? AppColors.primary.withValues(alpha: 0.3)
+                : Colors.transparent,
+            width: NumberConstant.albumPlayingTileBorderWidth,
+          ),
         ),
         padding: .all(NumberConstant.songListItemPadding),
         child: Row(
           spacing: NumberConstant.contentGap,
           children: [
-            ClipRRect(
-              borderRadius: .circular(NumberConstant.songThumbRadius),
-              child: Image.asset(
-                song.coverAsset,
-                width: NumberConstant.songThumbSize,
-                height: NumberConstant.songThumbSize,
-                fit: .cover,
+            Hero(
+              tag: 'cover-${song.id}',
+              child: Material(
+                color: Colors.transparent,
+                child: ClipRRect(
+                  borderRadius: .circular(NumberConstant.songThumbRadius),
+                  child: Image.asset(
+                    song.coverAsset,
+                    width: NumberConstant.songThumbSize,
+                    height: NumberConstant.songThumbSize,
+                    fit: .cover,
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -237,8 +291,18 @@ class AlbumScreen extends StatelessWidget {
                 crossAxisAlignment: .start,
                 spacing: NumberConstant.tinyGap,
                 children: [
-                  Text(song.title, style: AppTextStyles.songListTitle, maxLines: 1, overflow: .ellipsis,),
-                  Text(song.artist, style: AppTextStyles.songListSubtitle, maxLines: 1, overflow: .ellipsis,),
+                  Text(
+                    song.title,
+                    style: AppTextStyles.songListTitle,
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                  ),
+                  Text(
+                    song.artist,
+                    style: AppTextStyles.songListSubtitle,
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                  ),
                 ],
               ),
             ),
@@ -250,20 +314,114 @@ class AlbumScreen extends StatelessWidget {
                   width: NumberConstant.songActionIconSize,
                   height: NumberConstant.songActionIconSize,
                   colorFilter: .mode(
-                    song.isFavorite ? AppColors.primary : AppColors.primary.withValues(alpha: 0.2),
+                    song.isFavorite
+                        ? AppColors.primary
+                        : AppColors.primary.withValues(alpha: 0.2),
                     .srcIn,
                   ),
                 ),
                 PlayPauseButton(
                   isPlaying: isPlaying,
                   onTap: onPlayTap,
-                  size: isPlaying ? NumberConstant.playIconSize : NumberConstant.nowPlayingPlaySize,
-                  useNowPlayingAsset: isPlaying ? false : true,
+                  size: isPlaying
+                      ? NumberConstant.playIconSize
+                      : NumberConstant.nowPlayingPlaySize,
+                  useNowPlayingAsset: !isPlaying,
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _RotatingVinyl extends StatefulWidget {
+  final bool isPlaying;
+
+  const _RotatingVinyl({required this.isPlaying});
+
+  @override
+  State<_RotatingVinyl> createState() => _RotatingVinylState();
+}
+
+class _RotatingVinylState extends State<_RotatingVinyl>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: NumberConstant.vinylRotationSeconds),
+    );
+    if (widget.isPlaying) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _RotatingVinyl oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isPlaying == oldWidget.isPlaying) return;
+    if (widget.isPlaying) {
+      _controller.repeat();
+    } else {
+      _controller.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: _controller,
+      child: SvgPicture.asset(
+        AssetRes.icVinyl,
+        width: NumberConstant.albumVinylSize,
+        height: NumberConstant.albumVinylSize,
+      ),
+    );
+  }
+}
+
+class _PressableScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _PressableScale({
+    required this.child,
+    required this.onTap,
+  });
+
+  @override
+  State<_PressableScale> createState() => _PressableScaleState();
+}
+
+class _PressableScaleState extends State<_PressableScale> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? NumberConstant.controlPressScale : 1,
+        duration: const Duration(milliseconds: NumberConstant.animFast),
+        curve: Curves.easeOutCubic,
+        child: widget.child,
       ),
     );
   }

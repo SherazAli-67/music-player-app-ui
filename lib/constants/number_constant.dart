@@ -1,16 +1,12 @@
 class NumberConstant {
   static const horizontalPadding = 20.0;
-  static const headerTopPadding = 48.0;
   static const sectionGap = 20.0;
   static const contentGap = 12.0;
   static const smallGap = 8.0;
   static const tinyGap = 4.0;
   static const chipGap = 12.0;
   static const playlistCardGap = 16.0;
-  static const recentlyPlayedCardGap = 9.0;
-  static const recentlyPlayedCardWidth = 261.0;
   static const recentlyPlayedCardHeight = 188.0;
-  static const recentlyPlayedFeaturedWidth = 289.0;
   static const recentlyPlayedRadius = 32.0;
   static const playlistCoverSize = 145.0;
   static const playlistCoverRadius = 24.0;
@@ -29,7 +25,6 @@ class NumberConstant {
   static const songListItemRadius = 18.0;
   static const categoryChipRadius = 50.0;
   static const headerBottomRadius = 50.0;
-  static const playButtonSize = 38.0;
   static const nowPlayingPlaySize = 58.0;
   static const recentlyPlayedRotation = 0.1;
   static const headerBackPadding = 9.0;
@@ -44,28 +39,20 @@ class NumberConstant {
   static const categoryChipPaddingH = 12.0;
   static const categoryChipPaddingV = 6.0;
   static const categoryIconGap = 6.0;
-  static const categoryIconSize = 24.0;
   static const miniPlayerPadding = 12.0;
   static const miniPlayerBottom = 0.0;
   static const homeBottomContentPadding = 120.0;
-  static const notificationBadgeSize = 8.0;
   static const wavingHandSize = 22.0;
-  static const searchIconSize = 24.0;
-  static const micIconSize = 20.0;
-  static const headerGlowSize = 206.0;
   static const lyricsPaddingH = 24.0;
   static const lyricsPaddingV = 20.0;
   static const lyricsLineGap = 8.0;
-  static const nowPlayingBlockGap = 16.0;
   static const nowPlayingControlsGap = 32.0;
   static const nowPlayingSideControlsGap = 28.0;
-  static const progressTrackHeight = 3.0;
   static const progressActiveHeight = 4.0;
   static const controlIconPadding = 4.0;
   static const skipIconSize = 22.0;
   static const seekIconSize = 24.0;
   static const bottomActionBarHeight = 85.0;
-  static const bottomActionIconSize = 24.0;
   static const coverShadowBlur = 74.0;
   static const coverShadowY = 14.0;
   static const albumVinylSize = 175.0;
@@ -90,4 +77,6 @@ class NumberConstant {
   static const coverPausedScale = 0.96;
   static const controlPressScale = 0.88;
   static const seekStepSeconds = 15;
+  static const vinylRotationSeconds = 10;
+  static const albumPlayingTileBorderWidth = 1.5;
 }

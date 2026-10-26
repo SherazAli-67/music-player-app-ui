@@ -18,7 +18,6 @@ class AssetRes {
   static const icMic = '${_iconsPath}ic_mic.svg';
   static const icNotificationBell = '${_iconsPath}ic_notification_bell.svg';
   static const icArrowBack = '${_iconsPath}ic_arrow_back.svg';
-  static const icMoreDropdown = '${_iconsPath}ic_more_dropdown.svg';
   static const icPrevMusic = '${_iconsPath}ic_prev_music.svg';
   static const icNextMusic = '${_iconsPath}ic_next_music.svg';
   static const icPrev15s = '${_iconsPath}ic_prev_15s.svg';
@@ -35,10 +34,7 @@ class AssetRes {
   static const icCategoryPodcast = '${_iconsPath}ic_category_podcast.svg';
   static const icCategoryMovie = '${_iconsPath}ic_category_movie.svg';
   static const icCategorySinger = '${_iconsPath}ic_category_singer.svg';
-  static const icHeaderGlow = '${_iconsPath}ic_header_glow.svg';
   static const icVinyl = '${_iconsPath}ic_vinyl.svg';
   static const icBottomCurve = '${_iconsPath}ic_bottom_curve.svg';
-  static const icSongActionPlaying = '${_iconsPath}ic_song_action_playing.svg';
-  static const icSongActionIdle = '${_iconsPath}ic_song_action_idle.svg';
   static const icMoreVertical = '${_iconsPath}ic_more_vertical.svg';
 }
