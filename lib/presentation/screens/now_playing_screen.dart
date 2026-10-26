@@ -34,17 +34,17 @@ class NowPlayingScreen extends StatelessWidget {
                       children: [
                         AppScreenHeader(
                           title: StringConst.nowPlaying,
-                          onBack: ()=> context.pop(),
+                          onBack: () => context.pop(),
                         ),
                         Expanded(
                           child: SingleChildScrollView(
                             child: Column(
                               spacing: NumberConstant.sectionGap,
                               children: [
-                                _buildCover(song),
+                                _buildCover(song, player.isPlaying),
                                 _buildSongInfo(song),
-                                _buildLyrics(song),
-                                _buildProgress(song),
+                                _buildLyrics(song, player.activeLyricIndex),
+                                _buildProgress(player),
                                 _buildControls(player),
                               ],
                             ),
@@ -63,26 +63,37 @@ class NowPlayingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCover(SongModel song) {
-    return Hero(
-      tag: 'cover-${song.id}',
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: double.infinity,
-          height: NumberConstant.nowPlayingCoverHeight,
-          decoration: BoxDecoration(
-            borderRadius: .circular(NumberConstant.nowPlayingCoverRadius),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0x4DFF5D37),
-                offset: const Offset(0, NumberConstant.coverShadowY),
-                blurRadius: NumberConstant.coverShadowBlur,
+  Widget _buildCover(SongModel song, bool isPlaying) {
+    return AnimatedScale(
+      scale: isPlaying ? NumberConstant.coverPlayingScale : NumberConstant.coverPausedScale,
+      duration: const Duration(milliseconds: NumberConstant.animNormal),
+      curve: Curves.easeOutCubic,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: NumberConstant.animNormal),
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        child: Hero(
+          key: ValueKey('now-playing-cover-${song.id}'),
+          tag: 'cover-${song.id}',
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: double.infinity,
+              height: NumberConstant.nowPlayingCoverHeight,
+              decoration: BoxDecoration(
+                borderRadius: .circular(NumberConstant.nowPlayingCoverRadius),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0x4DFF5D37),
+                    offset: const Offset(0, NumberConstant.coverShadowY),
+                    blurRadius: NumberConstant.coverShadowBlur,
+                  ),
+                ],
+                image: DecorationImage(
+                  image: AssetImage(song.coverAsset),
+                  fit: .cover,
+                ),
               ),
-            ],
-            image: DecorationImage(
-              image: AssetImage(song.coverAsset),
-              fit: .cover,
             ),
           ),
         ),
@@ -91,18 +102,35 @@ class NowPlayingScreen extends StatelessWidget {
   }
 
   Widget _buildSongInfo(SongModel song) {
-    return Column(
-      spacing: NumberConstant.tinyGap,
-      children: [
-        Text(song.title, style: AppTextStyles.songTitle, textAlign: .center,),
-        Text(song.artist, style: AppTextStyles.songArtist, textAlign: .center,),
-      ],
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: NumberConstant.animNormal),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.12),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: Column(
+        key: ValueKey(song.id),
+        spacing: NumberConstant.tinyGap,
+        children: [
+          Text(song.title, style: AppTextStyles.songTitle, textAlign: .center),
+          Text(song.artist, style: AppTextStyles.songArtist, textAlign: .center),
+        ],
+      ),
     );
   }
 
-  Widget _buildLyrics(SongModel song) {
+  Widget _buildLyrics(SongModel song, int activeIndex) {
     if (song.lyrics.isEmpty) return const SizedBox.shrink();
-    final activeIndex = song.lyrics.length ~/ 2;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -117,25 +145,29 @@ class NowPlayingScreen extends StatelessWidget {
         spacing: NumberConstant.lyricsLineGap,
         children: [
           for (var i = 0; i < song.lyrics.length; i++)
-            Text(
-              song.lyrics[i],
-              textAlign: .center,
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: NumberConstant.animFast),
+              curve: Curves.easeOutCubic,
               style: i == activeIndex ? AppTextStyles.lyricsActive : AppTextStyles.lyricsInactive,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: NumberConstant.animFast),
+                opacity: i == activeIndex ? 1 : 0.55,
+                child: Text(song.lyrics[i], textAlign: .center),
+              ),
             ),
         ],
       ),
     );
   }
 
-  Widget _buildProgress(SongModel song) {
-    final progress = _progressValue(song.currentPosition, song.duration);
+  Widget _buildProgress(PlayerProvider player) {
     return Column(
       spacing: NumberConstant.smallGap,
       children: [
         ClipRRect(
           borderRadius: .circular(NumberConstant.progressActiveHeight),
           child: LinearProgressIndicator(
-            value: progress,
+            value: player.progress,
             minHeight: NumberConstant.progressActiveHeight,
             backgroundColor: AppColors.primary60.withValues(alpha: 0.25),
             color: AppColors.primary,
@@ -144,8 +176,8 @@ class NowPlayingScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: .spaceBetween,
           children: [
-            Text(song.currentPosition, style: AppTextStyles.timeLabel,),
-            Text(song.duration, style: AppTextStyles.timeLabel,),
+            Text(player.positionLabel, style: AppTextStyles.timeLabel),
+            Text(player.durationLabel, style: AppTextStyles.timeLabel),
           ],
         ),
       ],
@@ -160,8 +192,17 @@ class NowPlayingScreen extends StatelessWidget {
         Row(
           spacing: NumberConstant.nowPlayingSideControlsGap,
           children: [
-            _buildControlIcon(AssetRes.icPrevMusic, size: NumberConstant.skipIconSize),
-            _buildControlIcon(AssetRes.icPrev15s, size: NumberConstant.seekIconSize, color: AppColors.primary60),
+            _PressableControlIcon(
+              asset: AssetRes.icPrevMusic,
+              size: NumberConstant.skipIconSize,
+              onTap: () {},
+            ),
+            _PressableControlIcon(
+              asset: AssetRes.icPrev15s,
+              size: NumberConstant.seekIconSize,
+              color: AppColors.primary60,
+              onTap: () => player.seekBy(-NumberConstant.seekStepSeconds),
+            ),
           ],
         ),
         PlayPauseButton(
@@ -173,74 +214,122 @@ class NowPlayingScreen extends StatelessWidget {
         Row(
           spacing: NumberConstant.nowPlayingSideControlsGap,
           children: [
-            _buildControlIcon(AssetRes.icNext15s, size: NumberConstant.seekIconSize, color: AppColors.primary60),
-            _buildControlIcon(AssetRes.icNextMusic, size: NumberConstant.skipIconSize),
+            _PressableControlIcon(
+              asset: AssetRes.icNext15s,
+              size: NumberConstant.seekIconSize,
+              color: AppColors.primary60,
+              onTap: () => player.seekBy(NumberConstant.seekStepSeconds),
+            ),
+            _PressableControlIcon(
+              asset: AssetRes.icNextMusic,
+              size: NumberConstant.skipIconSize,
+              onTap: () {},
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildControlIcon(String asset, {required double size, Color color = AppColors.primary}) {
-    return Padding(
-      padding: .all(NumberConstant.controlIconPadding),
-      child: SvgPicture.asset(asset, width: size, height: size, colorFilter: .mode(color, .srcIn),),
-    );
-  }
-
   Widget _buildBottomActions(SongModel song) {
-    return SizedBox(
-      height: NumberConstant.bottomActionBarHeight,
-      width: double.infinity,
-      child: Stack(
-        alignment: .bottomCenter,
-        children: [
-          Positioned.fill(
-            child: SvgPicture.asset(AssetRes.icBottomCurve, fit: .fill,),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: NumberConstant.animSlow),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, NumberConstant.animEntranceOffset * (1 - value)),
+            child: child,
           ),
-          SafeArea(
-            top: false,
-            child: Padding(
-              padding: .symmetric(horizontal: NumberConstant.horizontalPadding * 2),
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [
-                  SvgPicture.asset(
-                    AssetRes.icShare,
-                    colorFilter: .mode(AppColors.white, .srcIn),
-                  ),
-                  SvgPicture.asset(
-                    AssetRes.icFavorite,
-                    colorFilter: .mode(
-                      song.isFavorite ? AppColors.accent : AppColors.white,
-                      .srcIn,
+        );
+      },
+      child: SizedBox(
+        height: NumberConstant.bottomActionBarHeight,
+        width: double.infinity,
+        child: Stack(
+          alignment: .bottomCenter,
+          children: [
+            Positioned.fill(
+              child: SvgPicture.asset(AssetRes.icBottomCurve, fit: .fill),
+            ),
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: .symmetric(horizontal: NumberConstant.horizontalPadding * 2),
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    SvgPicture.asset(
+                      AssetRes.icShare,
+                      colorFilter: .mode(AppColors.white, .srcIn),
                     ),
-                  ),
-                  SvgPicture.asset(
-                    AssetRes.icDownload,
-                    colorFilter: .mode(AppColors.white, .srcIn),
-                  ),
-                ],
+                    SvgPicture.asset(
+                      AssetRes.icFavorite,
+                      colorFilter: .mode(
+                        song.isFavorite ? AppColors.accent : AppColors.white,
+                        .srcIn,
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      AssetRes.icDownload,
+                      colorFilter: .mode(AppColors.white, .srcIn),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
 
-  double _progressValue(String current, String total) {
-    final currentSeconds = _toSeconds(current);
-    final totalSeconds = _toSeconds(total);
-    if (totalSeconds <= 0) return 0;
-    return (currentSeconds / totalSeconds).clamp(0.0, 1.0);
-  }
+class _PressableControlIcon extends StatefulWidget {
+  final String asset;
+  final double size;
+  final Color color;
+  final VoidCallback onTap;
 
-  int _toSeconds(String time) {
-    final parts = time.split(':');
-    if (parts.length != 2) return 0;
-    final minutes = int.tryParse(parts[0]) ?? 0;
-    final seconds = int.tryParse(parts[1]) ?? 0;
-    return minutes * 60 + seconds;
+  const _PressableControlIcon({
+    required this.asset,
+    required this.size,
+    required this.onTap,
+    this.color = AppColors.primary,
+  });
+
+  @override
+  State<_PressableControlIcon> createState() => _PressableControlIconState();
+}
+
+class _PressableControlIconState extends State<_PressableControlIcon> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? NumberConstant.controlPressScale : 1,
+        duration: const Duration(milliseconds: NumberConstant.animFast),
+        curve: Curves.easeOutCubic,
+        child: Padding(
+          padding: .all(NumberConstant.controlIconPadding),
+          child: SvgPicture.asset(
+            widget.asset,
+            width: widget.size,
+            height: widget.size,
+            colorFilter: .mode(widget.color, .srcIn),
+          ),
+        ),
+      ),
+    );
   }
 }

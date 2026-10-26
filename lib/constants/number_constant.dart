@@ -86,4 +86,8 @@ class NumberConstant {
   static const animSlow = 350;
   static const animStaggerMs = 40;
   static const animEntranceOffset = 12.0;
+  static const coverPlayingScale = 1.0;
+  static const coverPausedScale = 0.96;
+  static const controlPressScale = 0.88;
+  static const seekStepSeconds = 15;
 }
