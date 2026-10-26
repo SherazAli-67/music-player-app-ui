@@ -68,4 +68,16 @@ class NumberConstant {
   static const bottomActionIconSize = 24.0;
   static const coverShadowBlur = 74.0;
   static const coverShadowY = 14.0;
+  static const albumVinylSize = 175.0;
+  static const albumVinylOffset = 35.0;
+  static const albumActionGap = 16.0;
+  static const albumActionPaddingH = 24.0;
+  static const albumActionPaddingV = 16.0;
+  static const albumShareIconSize = 18.0;
+  static const albumDownloadIconSize = 22.0;
+  static const albumSubscribeIconSize = 16.0;
+  static const albumSubscribeIconGap = 10.0;
+  static const songListItemPadding = 16.0;
+  static const songListGap = 12.0;
+  static const songActionIconSize = 18.0;
 }

@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:music_player_app_ui/core/app_data.dart';
+import 'package:music_player_app_ui/core/models/playlist_model.dart';
 import 'package:music_player_app_ui/presentation/screens/album_screen.dart';
 import 'package:music_player_app_ui/presentation/screens/home_screen.dart';
 import 'package:music_player_app_ui/presentation/screens/now_playing_screen.dart';
@@ -7,7 +9,12 @@ GoRouter router = GoRouter(
   initialLocation: NamedRoutes.home.routeName,
   routes: [
     GoRoute(path: NamedRoutes.home.routeName, builder: (ctx, state)=> const HomeScreen()),
-    GoRoute(path: NamedRoutes.album.routeName, builder: (ctx, state)=> const AlbumScreen()),
+    GoRoute(
+      path: NamedRoutes.album.routeName,
+      builder: (ctx, state)=> AlbumScreen(
+        album: state.extra is PlaylistModel ? state.extra as PlaylistModel : AppData.featuredAlbum,
+      ),
+    ),
     GoRoute(path: NamedRoutes.nowPlaying.routeName, builder: (ctx, state)=> const NowPlayingScreen()),
   ],
 );
