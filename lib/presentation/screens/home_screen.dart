@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -70,45 +71,40 @@ class _HomeView extends StatelessWidget {
   }
 
   Widget _buildPurpleHeader(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.headerPurple,
-        borderRadius: .vertical(bottom: .circular(NumberConstant.headerBottomRadius)),
-      ),
-      clipBehavior: .hardEdge,
+      height: 445,
       child: Stack(
+        // spacing: NumberConstant.contentGap,
         children: [
-          Positioned(
-            left: -58,
-            top: -50,
-            child: SvgPicture.asset(AssetRes.icHeaderGlow, width: NumberConstant.headerGlowSize, height: NumberConstant.headerGlowSize,),
-          ),
-          Positioned(
-            right: -58,
-            top: 130,
-            child: SvgPicture.asset(AssetRes.icHeaderGlow, width: NumberConstant.headerGlowSize, height: NumberConstant.headerGlowSize,),
-          ),
-          SafeArea(
-            bottom: false,
-            child: Padding(
+          Container(
+              height: 335,
+              decoration: BoxDecoration(
+                color: AppColors.headerPurple,
+                borderRadius: .vertical(bottom: .circular(NumberConstant.headerBottomRadius)),
+              ),
               padding: .fromLTRB(
                 NumberConstant.horizontalPadding,
                 NumberConstant.contentGap,
                 NumberConstant.horizontalPadding,
                 NumberConstant.sectionGap,
               ),
-              child: Column(
-                spacing: NumberConstant.contentGap,
-                children: [
-                  _buildGreetingRow(),
-                  _buildSearchBar(),
-                  const SectionHeader(title: StringConst.recentlyPlayed, isWhite: true,),
-                  _buildRecentlyPlayedList(context),
-                ],
-              ),
-            ),
+              child:SafeArea(
+                child: Column(
+                  spacing: NumberConstant.contentGap,
+                  children: [
+                    _buildGreetingRow(),
+                    _buildSearchBar(),
+                    const SectionHeader(title: StringConst.recentlyPlayed, isWhite: true,),
+                  ],
+                ),
+              )
           ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: _buildRecentlyPlayedList(context),)
         ],
       ),
     );
@@ -202,59 +198,67 @@ class _HomeView extends StatelessWidget {
   }
 
   Widget _buildRecentlyPlayedList(BuildContext context) {
-    final player = context.read<PlayerProvider>();
-    return SizedBox(
-      height: NumberConstant.recentlyPlayedCardHeight + 30,
-      child: ListView.separated(
-        scrollDirection: .horizontal,
-        clipBehavior: .none,
-        itemCount: AppData.recentlyPlayed.length,
-        separatorBuilder: (_, _)=> const SizedBox(width: NumberConstant.recentlyPlayedCardGap),
-        itemBuilder: (ctx, index) {
-          final song = AppData.recentlyPlayed[index];
-          final isFeatured = index == 1;
-          final rotation = index == 0
-              ? -NumberConstant.recentlyPlayedRotation
-              : (index == 2 ? NumberConstant.recentlyPlayedRotation : 0.0);
-          return Transform.rotate(
-            angle: rotation,
-            child: _buildRecentlyPlayedCard(
-              song: song,
-              isFeatured: isFeatured,
-              onPlay: ()=> player.play(song),
-              onTap: ()=> context.push(NamedRoutes.album.routeName, extra: AppData.featuredAlbum),
+    return Consumer<PlayerProvider>(
+      builder: (ctx, player, _) {
+        final itemCount = AppData.recentlyPlayed.length;
+        return SizedBox(
+          height: NumberConstant.recentlyPlayedCardHeight + 30,
+          child: CarouselSlider(
+            items: List.generate(itemCount, (index) {
+              final song = AppData.recentlyPlayed[index];
+              return Transform.rotate(
+                angle: _recentlyPlayedRotation(index, player.currentIndex, itemCount),
+                child: _buildRecentlyPlayedCard(
+                  song: song,
+                  onPlay: ()=> player.play(song),
+                  onTap: ()=> context.push(NamedRoutes.album.routeName, extra: AppData.featuredAlbum),
+                ),
+              );
+            }),
+            options: CarouselOptions(
+              height: NumberConstant.recentlyPlayedCardHeight + 30,
+              viewportFraction: 0.8,
+              initialPage: player.currentIndex,
+              enableInfiniteScroll: true,
+              autoPlay: true,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.3,
+              onPageChanged: (index, _)=> player.onPageChange(index),
+              scrollDirection: .horizontal,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  double _recentlyPlayedRotation(int index, int currentIndex, int itemCount) {
+    if (index == currentIndex || itemCount < 2) return 0.0;
+    final forwardSteps = (index - currentIndex + itemCount) % itemCount;
+    return forwardSteps <= itemCount ~/ 2
+        ? NumberConstant.recentlyPlayedRotation
+        : -NumberConstant.recentlyPlayedRotation;
   }
 
   Widget _buildRecentlyPlayedCard({
     required SongModel song,
-    required bool isFeatured,
     required VoidCallback onPlay,
     required VoidCallback onTap,
   }) {
-    final width = isFeatured
-        ? NumberConstant.recentlyPlayedFeaturedWidth
-        : NumberConstant.recentlyPlayedCardWidth;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: width,
+        // width: width,
         height: NumberConstant.recentlyPlayedCardHeight,
         decoration: BoxDecoration(
           borderRadius: .circular(NumberConstant.recentlyPlayedRadius),
-          boxShadow: isFeatured
-              ? [
-                  BoxShadow(
-                    color: const Color(0x66FF6594),
-                    offset: const Offset(0, 4),
-                    blurRadius: 24,
-                  ),
-                ]
-              : null,
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0x66FF6594),
+              offset: const Offset(0, 4),
+              blurRadius: 24,
+            ),
+          ],
           image: DecorationImage(
             image: AssetImage(song.coverAsset),
             fit: .cover,
@@ -264,7 +268,7 @@ class _HomeView extends StatelessWidget {
         child: Container(
           width: double.infinity,
           padding: .symmetric(
-            horizontal: isFeatured ? 16 : NumberConstant.contentGap,
+            horizontal: NumberConstant.contentGap,
             vertical: NumberConstant.contentGap,
           ),
           decoration: BoxDecoration(
@@ -355,7 +359,7 @@ class _HomeView extends StatelessWidget {
       children: [
         const SectionHeader(title: StringConst.popularPlaylist,),
         SizedBox(
-          height: NumberConstant.playlistCoverSize + 40,
+          height: NumberConstant.playlistCoverSize + 60,
           child: ListView.separated(
             scrollDirection: .horizontal,
             itemCount: AppData.popularPlaylists.length,

@@ -5,9 +5,12 @@ import 'package:music_player_app_ui/core/models/song_model.dart';
 class PlayerProvider extends ChangeNotifier {
   SongModel _currentSong = AppData.miniPlayerSong;
   bool _isPlaying = true;
+  int _currentIndex = 0;
 
   SongModel get currentSong => _currentSong;
   bool get isPlaying => _isPlaying;
+  int get currentIndex => _currentIndex;
+
 
   void play(SongModel song) {
     _currentSong = song;
@@ -35,6 +38,11 @@ class PlayerProvider extends ChangeNotifier {
   void resume() {
     if (_isPlaying) return;
     _isPlaying = true;
+    notifyListeners();
+  }
+
+  void onPageChange(int index) {
+    _currentIndex = index;
     notifyListeners();
   }
 }
