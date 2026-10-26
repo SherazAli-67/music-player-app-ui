@@ -64,21 +64,27 @@ class NowPlayingScreen extends StatelessWidget {
   }
 
   Widget _buildCover(SongModel song) {
-    return Container(
-      width: double.infinity,
-      height: NumberConstant.nowPlayingCoverHeight,
-      decoration: BoxDecoration(
-        borderRadius: .circular(NumberConstant.nowPlayingCoverRadius),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0x4DFF5D37),
-            offset: const Offset(0, NumberConstant.coverShadowY),
-            blurRadius: NumberConstant.coverShadowBlur,
+    return Hero(
+      tag: 'cover-${song.id}',
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: double.infinity,
+          height: NumberConstant.nowPlayingCoverHeight,
+          decoration: BoxDecoration(
+            borderRadius: .circular(NumberConstant.nowPlayingCoverRadius),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x4DFF5D37),
+                offset: const Offset(0, NumberConstant.coverShadowY),
+                blurRadius: NumberConstant.coverShadowBlur,
+              ),
+            ],
+            image: DecorationImage(
+              image: AssetImage(song.coverAsset),
+              fit: .cover,
+            ),
           ),
-        ],
-        image: DecorationImage(
-          image: AssetImage(song.coverAsset),
-          fit: .cover,
         ),
       ),
     );

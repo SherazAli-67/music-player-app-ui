@@ -80,4 +80,10 @@ class NumberConstant {
   static const songListItemPadding = 16.0;
   static const songListGap = 12.0;
   static const songActionIconSize = 18.0;
+
+  static const animFast = 180;
+  static const animNormal = 280;
+  static const animSlow = 350;
+  static const animStaggerMs = 40;
+  static const animEntranceOffset = 12.0;
 }

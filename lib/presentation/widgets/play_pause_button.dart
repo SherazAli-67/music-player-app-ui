@@ -24,7 +24,23 @@ class PlayPauseButton extends StatelessWidget {
         : (isPlaying ? AssetRes.icPauseCircle : AssetRes.icPlayCircle);
     return GestureDetector(
       onTap: onTap,
-      child: SvgPicture.asset(asset, width: size, height: size,),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: NumberConstant.animFast),
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(
+            scale: animation,
+            child: FadeTransition(opacity: animation, child: child),
+          );
+        },
+        child: SvgPicture.asset(
+          asset,
+          key: ValueKey(asset),
+          width: size,
+          height: size,
+        ),
+      ),
     );
   }
 }
