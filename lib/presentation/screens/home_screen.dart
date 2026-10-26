@@ -73,29 +73,29 @@ class _HomeView extends StatelessWidget {
   Widget _buildPurpleHeader(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 445,
+      height: 465,
       child: Stack(
         // spacing: NumberConstant.contentGap,
         children: [
           Container(
-              height: 335,
+              height: 350,
               decoration: BoxDecoration(
-                color: AppColors.headerPurple,
+                // color: AppColors.headerPurple,
                 borderRadius: .vertical(bottom: .circular(NumberConstant.headerBottomRadius)),
               ),
-              padding: .fromLTRB(
+             /* padding: .fromLTRB(
                 NumberConstant.horizontalPadding,
                 NumberConstant.contentGap,
                 NumberConstant.horizontalPadding,
                 NumberConstant.sectionGap,
-              ),
+              ),*/
               child:SafeArea(
                 child: Column(
                   spacing: NumberConstant.contentGap,
                   children: [
                     _buildGreetingRow(),
                     _buildSearchBar(),
-                    const SectionHeader(title: StringConst.recentlyPlayed, isWhite: true,),
+                    //SectionHeader-recentlyPlayed, isWhite:true
                   ],
                 ),
               )
@@ -117,8 +117,9 @@ class _HomeView extends StatelessWidget {
         Row(
           spacing: NumberConstant.greetingAvatarGap,
           children: [
+            //userAvatar, avatarSize, fit.cover
             ClipOval(
-              child: Image.asset(AssetRes.userAvatar, width: NumberConstant.avatarSize, height: NumberConstant.avatarSize, fit: .cover,),
+              child: const SizedBox()
             ),
             Column(
               crossAxisAlignment: .start,
@@ -127,11 +128,11 @@ class _HomeView extends StatelessWidget {
                 Row(
                   spacing: NumberConstant.tinyGap,
                   children: [
-                    Text(StringConst.greetingName, style: AppTextStyles.greeting,),
-                    SvgPicture.asset(AssetRes.icWavingHand, width: NumberConstant.wavingHandSize, height: NumberConstant.wavingHandSize,),
+                    //greetingName, greeting
+                    //icWavingHand, wavingHandSized
                   ],
                 ),
-                Text(StringConst.greetingSubtitle, style: AppTextStyles.greetingSubtitle,),
+                //greetingSubtitle, greetingSubtitle
               ],
             ),
           ],
@@ -139,18 +140,14 @@ class _HomeView extends StatelessWidget {
         Stack(
           clipBehavior: .none,
           children: [
-            AppHeaderButton(
+           /* AppHeaderButton(
               iconAsset: AssetRes.icNotificationBell,
               iconColor: AppColors.white,
-              iconSize: 19,
-              padding: 9.5,
-            ),
-            Positioned(
+            ),*/
+         /*   Positioned(
               right: 0,
               top: 0,
               child: Container(
-                width: NumberConstant.notificationBadgeSize,
-                height: NumberConstant.notificationBadgeSize,
                 decoration: BoxDecoration(
                   color: AppColors.accent,
                   shape: .circle,
@@ -163,7 +160,7 @@ class _HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ],
@@ -173,12 +170,12 @@ class _HomeView extends StatelessWidget {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.overlayWhite30,
+        // color: AppColors.overlayWhite30,
         borderRadius: .circular(NumberConstant.searchBarRadius),
       ),
       padding: .symmetric(
-        horizontal: NumberConstant.searchBarPaddingH,
-        vertical: NumberConstant.searchBarPaddingV,
+        // horizontal: NumberConstant.searchBarPaddingH,
+        // vertical: NumberConstant.searchBarPaddingV,
       ),
       child: Row(
         children: [
@@ -186,12 +183,12 @@ class _HomeView extends StatelessWidget {
             child: Row(
               spacing: NumberConstant.searchIconGap,
               children: [
-                SvgPicture.asset(AssetRes.icSearch, width: NumberConstant.searchIconSize, height: NumberConstant.searchIconSize, colorFilter: .mode(AppColors.white, .srcIn),),
-                Text(StringConst.searchPlaceholder, style: AppTextStyles.searchPlaceholder,),
+                //icSearch
+                //searchPlaceHolder, searchPlaceHolder
               ],
             ),
           ),
-          SvgPicture.asset(AssetRes.icMic, width: NumberConstant.micIconSize, height: NumberConstant.micIconSize, colorFilter: .mode(AppColors.white, .srcIn),),
+          //icMic
         ],
       ),
     );
@@ -217,7 +214,7 @@ class _HomeView extends StatelessWidget {
             }),
             options: CarouselOptions(
               height: NumberConstant.recentlyPlayedCardHeight + 30,
-              viewportFraction: 0.8,
+              viewportFraction: 0.85,
               initialPage: player.currentIndex,
               enableInfiniteScroll: true,
               autoPlay: true,
@@ -248,21 +245,20 @@ class _HomeView extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // width: width,
         height: NumberConstant.recentlyPlayedCardHeight,
         decoration: BoxDecoration(
-          borderRadius: .circular(NumberConstant.recentlyPlayedRadius),
+          // borderRadius: .circular(NumberConstant.recentlyPlayedRadius),
           boxShadow: [
-            BoxShadow(
+          /*  BoxShadow(
               color: const Color(0x66FF6594),
               offset: const Offset(0, 4),
               blurRadius: 24,
-            ),
+            ),*/
           ],
-          image: DecorationImage(
+         /* image: DecorationImage(
             image: AssetImage(song.coverAsset),
             fit: .cover,
-          ),
+          ),*/
         ),
         alignment: .bottomCenter,
         child: Container(
@@ -272,8 +268,8 @@ class _HomeView extends StatelessWidget {
             vertical: NumberConstant.contentGap,
           ),
           decoration: BoxDecoration(
-            color: AppColors.overlayBlack50,
-            borderRadius: .vertical(bottom: .circular(NumberConstant.recentlyPlayedRadius)),
+            // color: AppColors.overlayBlack50,
+            // borderRadius: .vertical(bottom: .circular(NumberConstant.recentlyPlayedRadius)),
           ),
           child: Row(
             mainAxisAlignment: .spaceBetween,
@@ -285,12 +281,12 @@ class _HomeView extends StatelessWidget {
                   crossAxisAlignment: .start,
                   spacing: 2,
                   children: [
-                    Text(song.title, style: AppTextStyles.cardTitle, maxLines: 1, overflow: .ellipsis,),
-                    Text(song.artist, style: AppTextStyles.cardSubtitle, maxLines: 1, overflow: .ellipsis,),
+                    //song.title, cardTitle
+                    //song.artist, cardSubtitle
                   ],
                 ),
               ),
-              PlayPauseButton(isPlaying: false, onTap: onPlay,),
+              // PlayPauseButton(isPlaying: false, onTap: onPlay,),
             ],
           ),
         ),
@@ -321,9 +317,9 @@ class _HomeView extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: category.isSelected ? AppColors.primary : AppColors.white,
+          // color: category.isSelected ? AppColors.primary : AppColors.white,
           borderRadius: .circular(NumberConstant.categoryChipRadius),
-          boxShadow: category.isSelected
+         /* boxShadow: category.isSelected
               ? [
                   BoxShadow(
                     color: const Color(0x333D2072),
@@ -331,7 +327,7 @@ class _HomeView extends StatelessWidget {
                     blurRadius: 24,
                   ),
                 ]
-              : null,
+              : null,*/
         ),
         padding: .only(
           left: NumberConstant.categoryChipPaddingV,
@@ -342,11 +338,9 @@ class _HomeView extends StatelessWidget {
         child: Row(
           spacing: NumberConstant.categoryIconGap,
           children: [
-            SvgPicture.asset(category.iconAsset, width: NumberConstant.categoryIconSize, height: NumberConstant.categoryIconSize,),
-            Text(
-              category.label,
-              style: category.isSelected ? AppTextStyles.categoryLabel : AppTextStyles.categoryLabelInactive,
-            ),
+            //iC -category.iconAsset,
+            //category.label, category.isSelected ? AppTextStyles.categoryLabel : AppTextStyles.categoryLabelInactive
+
           ],
         ),
       ),
@@ -357,7 +351,7 @@ class _HomeView extends StatelessWidget {
     return Column(
       spacing: NumberConstant.sectionGap,
       children: [
-        const SectionHeader(title: StringConst.popularPlaylist,),
+        // const SectionHeader(title: StringConst.popularPlaylist,),
         SizedBox(
           height: NumberConstant.playlistCoverSize + 60,
           child: ListView.separated(
@@ -385,12 +379,8 @@ class _HomeView extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: .circular(NumberConstant.playlistCoverRadius),
-              child: Image.asset(
-                playlist.coverAsset,
-                width: NumberConstant.playlistCoverSize,
-                height: NumberConstant.playlistCoverSize,
-                fit: .cover,
-              ),
+              //image -playlist.coverAsset, fit.cover
+              child: const SizedBox()
             ),
             Row(
               crossAxisAlignment: .start,
@@ -400,12 +390,12 @@ class _HomeView extends StatelessWidget {
                     crossAxisAlignment: .start,
                     spacing: 1,
                     children: [
-                      Text(playlist.title, style: AppTextStyles.playlistTitle, maxLines: 1, overflow: .ellipsis,),
-                      Text(playlist.artist, style: AppTextStyles.playlistArtist, maxLines: 1, overflow: .ellipsis,),
+                      //playList.title, playListTitle,
+                      //playList.artist, playListArtist
                     ],
                   ),
                 ),
-                SvgPicture.asset(AssetRes.icMoreVertical, width: 2, height: 12,),
+                // SvgPicture.asset(AssetRes.icMoreVertical, width: 2, height: 12,),
               ],
             ),
           ],
@@ -425,14 +415,14 @@ class _HomeView extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.primary,
+              // color: AppColors.primary,
               borderRadius: .circular(NumberConstant.miniPlayerRadius),
               boxShadow: [
-                BoxShadow(
+                /*BoxShadow(
                   color: const Color(0x333D2072),
                   offset: const Offset(0, 9),
                   blurRadius: 24,
-                ),
+                ),*/
               ],
             ),
             padding: .all(NumberConstant.miniPlayerPadding),
@@ -441,12 +431,8 @@ class _HomeView extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: .circular(NumberConstant.songThumbRadius),
-                  child: Image.asset(
-                    song.coverAsset,
-                    width: NumberConstant.songThumbSize,
-                    height: NumberConstant.songThumbSize,
-                    fit: .cover,
-                  ),
+                  //image: song.coverAsset, widthHeight: songThumbSize, fit.cover
+                  child: const SizedBox()
                 ),
                 Expanded(
                   child: Column(
@@ -454,15 +440,15 @@ class _HomeView extends StatelessWidget {
                     crossAxisAlignment: .start,
                     spacing: 2,
                     children: [
-                      Text(song.title, style: AppTextStyles.cardTitle, maxLines: 1, overflow: .ellipsis,),
-                      Text(song.artist, style: AppTextStyles.cardSubtitle, maxLines: 1, overflow: .ellipsis,),
+                      //song.title, cardTitle,
+                      //song.artist, cardSubtitle
                     ],
                   ),
                 ),
-                PlayPauseButton(
+                /*PlayPauseButton(
                   isPlaying: player.isPlaying,
                   onTap: player.togglePlayPause,
-                ),
+                ),*/
               ],
             ),
           ),

@@ -12,7 +12,7 @@ class NumberConstant {
   static const recentlyPlayedCardHeight = 188.0;
   static const recentlyPlayedFeaturedWidth = 289.0;
   static const recentlyPlayedRadius = 32.0;
-  static const playlistCoverSize = 115.0;
+  static const playlistCoverSize = 145.0;
   static const playlistCoverRadius = 24.0;
   static const songThumbSize = 47.0;
   static const songThumbRadius = 12.0;
@@ -46,8 +46,8 @@ class NumberConstant {
   static const categoryIconGap = 6.0;
   static const categoryIconSize = 24.0;
   static const miniPlayerPadding = 12.0;
-  static const miniPlayerBottom = 16.0;
-  static const homeBottomContentPadding = 100.0;
+  static const miniPlayerBottom = 0.0;
+  static const homeBottomContentPadding = 120.0;
   static const notificationBadgeSize = 8.0;
   static const wavingHandSize = 22.0;
   static const searchIconSize = 24.0;

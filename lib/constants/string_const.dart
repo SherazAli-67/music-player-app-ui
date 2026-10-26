@@ -1,7 +1,7 @@
 class StringConst {
   static const appTitle = 'Music player app';
   static const appFontFamily = 'Outfit';
-  static const greetingName = 'Hi! Rakib';
+  static const greetingName = 'Hi! Sheraz';
   static const greetingSubtitle = 'Let’s explore all media';
   static const searchPlaceholder = 'Search song, movie, podcast';
   static const recentlyPlayed = 'Recently Played';
