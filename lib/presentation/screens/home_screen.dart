@@ -419,7 +419,10 @@ class _HomeView extends StatelessWidget {
       builder: (ctx, player, _) {
         final song = player.currentSong;
         return GestureDetector(
-          onTap: ()=> context.push(NamedRoutes.nowPlaying.routeName),
+          onTap: () {
+            if (player.currentSong.lyrics.isEmpty) player.setSong(AppData.nowPlayingSong, play: player.isPlaying);
+            context.push(NamedRoutes.nowPlaying.routeName);
+          },
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.primary,

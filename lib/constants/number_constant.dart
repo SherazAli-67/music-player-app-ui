@@ -53,4 +53,19 @@ class NumberConstant {
   static const searchIconSize = 24.0;
   static const micIconSize = 20.0;
   static const headerGlowSize = 206.0;
+  static const lyricsPaddingH = 24.0;
+  static const lyricsPaddingV = 20.0;
+  static const lyricsLineGap = 8.0;
+  static const nowPlayingBlockGap = 16.0;
+  static const nowPlayingControlsGap = 32.0;
+  static const nowPlayingSideControlsGap = 28.0;
+  static const progressTrackHeight = 3.0;
+  static const progressActiveHeight = 4.0;
+  static const controlIconPadding = 4.0;
+  static const skipIconSize = 22.0;
+  static const seekIconSize = 24.0;
+  static const bottomActionBarHeight = 85.0;
+  static const bottomActionIconSize = 24.0;
+  static const coverShadowBlur = 74.0;
+  static const coverShadowY = 14.0;
 }
